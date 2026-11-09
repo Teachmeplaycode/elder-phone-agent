@@ -121,6 +121,8 @@ class SafetyGuard(object):
             res.update(decision="block", category=v.get("category", cat), reason="意图不一致: " + v.get("reason", ""))
         elif v["consistent"] != "yes":
             res.update(decision="confirm", category=v.get("category", cat), reason="需老人确认: " + v.get("reason", ""))
+        elif action.get("action") == "input" and v.get("category") != "secret":
+            res.update(decision="allow", category="none", reason=v.get("reason", ""))  # typing alone is reversible
         elif v.get("irreversible") or v.get("category") == "secret":
             res.update(decision="confirm", category=v.get("category", cat), reason=v.get("reason", reason))
         else:

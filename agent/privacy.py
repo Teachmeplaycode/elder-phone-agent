@@ -8,7 +8,7 @@ import re
 
 CODE_RE = re.compile(r"((?:验证码|校验码|动态码|取件码|提货码|取餐码|密码|凭)[^\d]{0,6})(\d[\d\- ]{2,10}\d)")
 ID_RE = re.compile(r"(?<!\d)\d{6}(?:19|20)\d{2}[01]\d[0-3]\d\d{3}[\dXx](?!\d)")
-LONG_DIGITS_RE = re.compile(r"(?<![\d.])\+?\d[\d \-]{5,22}\d(?![\d.])")
+LONG_DIGITS_RE = re.compile(r"(?<![\d.])\+?\(?\d[\d \-()]{5,22}\d(?![\d.])")
 
 
 def _digits(s):

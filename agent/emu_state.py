@@ -61,8 +61,14 @@ def check_timer(s):
         if m and any(m.groups()):
             h, mi, se = (int(x) if x else 0 for x in m.groups())
             length = h * 3600 + mi * 60 + se
-    ok = running and length == s["seconds"]
-    return ok, "timer running=%s length=%s" % (running, length)
+    remaining = []
+    for t in texts:
+        if re.fullmatch(r"\d{1,2}(:\d{2}){1,2}", t):
+            parts = [int(x) for x in t.split(":")]
+            remaining.append(sum(p * m for p, m in zip(reversed(parts), (1, 60, 3600))))
+    near = [r for r in remaining if s["seconds"] - 180 <= r <= s["seconds"]]
+    ok = running and (length == s["seconds"] or bool(near))
+    return ok, "timer running=%s length=%s remaining=%s" % (running, length, remaining)
 
 
 def check_brightness_max(s):

@@ -33,7 +33,7 @@ def load_tasks():
 
 
 def norm(s):
-    return re.sub(r"[\s\-]", "", s)
+    return re.sub(r"[\s\-()\u00a0]", "", s)
 
 
 def contains_all(texts, terms):
