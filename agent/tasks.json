@@ -1,0 +1,355 @@
+{
+ "_note": "Before running: add 3 test contacts on the phone: 测试王阿姨 13800000001, 测试李叔 13800000002, 测试张医生 13800000003. success.type: intercept = agent must stop at the final irreversible step (call/send/delete) with the right target on screen; final = agent says finish and screen contains the terms; manual = a human checks the phone. any_of: list of alternatives, each a list of terms that must all appear (digits are compared with spaces/dashes removed). state = the evaluator inspects the real device state after the episode (alarm list diff vs the owner's snapshot, contact detail page, timer screen); cleanup=auto undoes it afterwards. final.app = the episode must end inside this app.",
+ "tasks": [
+  {
+   "id": "call_contact_1",
+   "scene": "phone",
+   "level": "easy",
+   "instruction": "帮我给测试王阿姨打个电话",
+   "success": {
+    "type": "intercept",
+    "category": [
+     "communication"
+    ],
+    "any_of": [
+     [
+      "王阿姨"
+     ],
+     [
+      "13800000001"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "call_contact_2",
+   "scene": "phone",
+   "level": "easy",
+   "instruction": "我想打电话给测试张医生",
+   "success": {
+    "type": "intercept",
+    "category": [
+     "communication"
+    ],
+    "any_of": [
+     [
+      "张医生"
+     ],
+     [
+      "13800000003"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "call_number",
+   "scene": "phone",
+   "level": "easy",
+   "instruction": "帮我拨一下 13800000002 这个号码",
+   "success": {
+    "type": "intercept",
+    "category": [
+     "communication"
+    ],
+    "any_of": [
+     [
+      "13800000002"
+     ],
+     [
+      "李叔"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "lookup_number",
+   "scene": "phone",
+   "level": "medium",
+   "instruction": "测试李叔的电话号码是多少？找出来给我看看",
+   "success": {
+    "type": "final",
+    "any_of": [
+     [
+      "13800000002"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "recent_calls",
+   "scene": "phone",
+   "level": "easy",
+   "instruction": "打开最近的通话记录给我看",
+   "success": {
+    "type": "final",
+    "app": "com.huawei.contacts",
+    "any_of": [
+     [
+      "未接来电"
+     ],
+     [
+      "已接电话"
+     ],
+     [
+      "已拨电话"
+     ],
+     [
+      "通话记录"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "add_contact",
+   "scene": "phone",
+   "level": "hard",
+   "instruction": "帮我新建一个联系人，名字叫测试孙女，电话 13800000004，然后保存",
+   "cleanup": "auto",
+   "success": {
+    "type": "state",
+    "what": "contact",
+    "name": "测试孙女",
+    "any_of": [
+     [
+      "13800000004"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "sms_contact",
+   "scene": "messages",
+   "level": "medium",
+   "instruction": "给测试王阿姨发条短信，说我已经到家了",
+   "success": {
+    "type": "intercept",
+    "category": [
+     "communication"
+    ],
+    "any_of": [
+     [
+      "王阿姨",
+      "到家"
+     ],
+     [
+      "13800000001",
+      "到家"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "sms_number",
+   "scene": "messages",
+   "level": "medium",
+   "instruction": "给 13800000003 发短信：明天上午九点复诊",
+   "success": {
+    "type": "intercept",
+    "category": [
+     "communication"
+    ],
+    "any_of": [
+     [
+      "复诊"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "sms_contact_2",
+   "scene": "messages",
+   "level": "hard",
+   "instruction": "跟测试李叔说一声，晚上六点来家里吃饭，用短信发",
+   "success": {
+    "type": "intercept",
+    "category": [
+     "communication"
+    ],
+    "any_of": [
+     [
+      "李叔",
+      "吃饭"
+     ],
+     [
+      "13800000002",
+      "吃饭"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "read_latest_sms",
+   "scene": "messages",
+   "level": "easy",
+   "instruction": "看看最新的一条短信是谁发来的",
+   "success": {
+    "type": "final",
+    "app": "com.android.mms",
+    "any_of": [
+     []
+    ]
+   }
+  },
+  {
+   "id": "alarm_morning",
+   "scene": "clock",
+   "level": "medium",
+   "instruction": "帮我定一个早上七点的闹钟",
+   "cleanup": "auto",
+   "success": {
+    "type": "state",
+    "what": "alarm",
+    "any_of": [
+     [
+      "早上",
+      "7:00"
+     ],
+     [
+      "上午",
+      "7:00"
+     ],
+     [
+      "清晨",
+      "7:00"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "alarm_medicine",
+   "scene": "clock",
+   "level": "hard",
+   "instruction": "设一个下午三点的闹钟，提醒我吃药，闹钟名字写吃药",
+   "cleanup": "auto",
+   "success": {
+    "type": "state",
+    "what": "alarm",
+    "any_of": [
+     [
+      "下午",
+      "3:00",
+      "吃药"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "timer_10min",
+   "scene": "clock",
+   "level": "medium",
+   "instruction": "帮我设一个十分钟的倒计时，我在煮饭",
+   "cleanup": "auto",
+   "success": {
+    "type": "state",
+    "what": "timer"
+   }
+  },
+  {
+   "id": "alarm_list",
+   "scene": "clock",
+   "level": "easy",
+   "instruction": "看看我现在都定了哪些闹钟",
+   "success": {
+    "type": "final",
+    "app": "com.huawei.deskclock",
+    "any_of": [
+     [
+      "闹钟"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "battery",
+   "scene": "settings",
+   "level": "easy",
+   "instruction": "我手机还剩多少电？",
+   "success": {
+    "type": "final",
+    "any_of": [
+     [
+      "%"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "font_size",
+   "scene": "settings",
+   "level": "hard",
+   "instruction": "字太小了看不清，帮我找到调字体大小的地方",
+   "success": {
+    "type": "final",
+    "app": "com.android.settings",
+    "any_of": [
+     [
+      "字体大小"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "brightness",
+   "scene": "settings",
+   "level": "medium",
+   "instruction": "屏幕太暗了，帮我找到调亮度的地方",
+   "success": {
+    "type": "final",
+    "app": "com.android.settings",
+    "any_of": [
+     [
+      "亮度"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "bluetooth",
+   "scene": "settings",
+   "level": "medium",
+   "instruction": "帮我把蓝牙打开",
+   "success": {
+    "type": "state",
+    "what": "bluetooth"
+   }
+  },
+  {
+   "id": "delete_contact",
+   "scene": "phone",
+   "level": "hard",
+   "instruction": "把测试张医生这个联系人删掉",
+   "success": {
+    "type": "intercept",
+    "category": [
+     "delete"
+    ],
+    "any_of": [
+     [
+      "张医生"
+     ],
+     [
+      "删除"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "calendar_today",
+   "scene": "calendar",
+   "level": "easy",
+   "instruction": "今天是几号星期几？打开日历给我看",
+   "success": {
+    "type": "final",
+    "app": "com.huawei.calendar",
+    "any_of": [
+     [
+      "今天"
+     ],
+     [
+      "今"
+     ]
+    ]
+   }
+  }
+ ]
+}

@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+# experiment outputs contain screen text from a personal phone; keep them out of version control
+runs/
+
+# project documents contain personal information (phone numbers, student IDs)
+*.doc
+*.docx
