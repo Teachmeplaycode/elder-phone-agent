@@ -8,3 +8,7 @@ runs/
 # project documents contain personal information (phone numbers, student IDs)
 *.doc
 *.docx
+
+# local handoff notes mention the owner's personal phone setup; keep them out of the public repo
+HANDOFF.md
+CLAUDE.md
